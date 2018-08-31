@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="mobile-web-app-capable" content="yes">
+	<title>Fam Club</title>
+ <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+	<script src="phonegap.js"></script>
+      <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script src="jquery.mobile-1.4.5.min.js"></script>
+	<script>
+
+var cols = [[179,255,255],[255,179,255],[179,255,204],[255,255,179]];
+var curback = 0, curnext=1;
+var rat=0.00;
+
+function setback()
+{ var rr = 1-rat;
+  var r = Math.floor(cols[curback][0] * rr + rat * cols[curnext][0]);
+  var g = Math.floor(cols[curback][1] * rr + rat * cols[curnext][1]);
+  var b = Math.floor(cols[curback][2] * rr + rat * cols[curnext][2]);
+  $(".myback").css('background-color','rgb('+r+','+g+','+b+')');
+  rat+=0.01;
+  if (rat>1) {
+     rat=0;
+     curback = curnext;
+     if (++curnext>3) curnext=0;
+  }
+ setTimeout(setback,100);
+}
+
+
+function jkinit()
+{ var me = window.localStorage.getItem('me');
+  if (!me) me='';
+  if (me.length) {
+   jQuery.mobile.changePage("#fampage", {transition: "flip"});
+  }
+  else {
+     $("#p1").show();
+  }
+  setback();
+}
+
+function jlogout()
+{  window.localStorage.removeItem('me');
+   $("#p1").show();
+   jQuery.mobile.changePage("#intropage", {transition: "flip"});
+}
+
+function jlogin()
+{ 
+   jQuery.mobile.changePage("#fampage", {transition: "flip"});
+
+}
+
+</script>
+</head>
+<body onload="jkinit()">
+
+<div data-role="page" id="intropage" class="mypg myback">
+
+ <div role="main" class="ui-content myback">
+<div name="p1" id="p1" style="display:none">
+<center>
+<img src="logo.png" style="width:50%">
+</center>
+<label for="email">Email:</label>
+<input type="email" name="email" id="email">
+<br><br>
+<label for="pwd">Password:</label>
+<input type="password" name="pwd" id="pwd">
+<br><br>
+<input type="button" value="LOG IN" onclick="jlogin();">
+</div>
+</div>
+</div>
+
+<div data-role="page" id="fampage" class="mypg myback">
+ <div role="main" class="ui-content myback">
+<center>
+<img src="logo.png" style="width:50%">
+</center>
+<p>Choose a Family</p>
+<input type="button" value="LOG IN" onclick="alert(cols[1][2]);">
+
+<div data-role="footer" onclick="jlogout()" data-fullscreen="true" data-position="fixed">
+<h4>Log Out</h4>
+</div>
+ </div>
+</div>
+
+</body>
+</html>
