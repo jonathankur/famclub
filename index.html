@@ -30,7 +30,7 @@ var fbLoginSuccess = function (userData) {
 
 function dofacebooklogin()
 {
-facebookConnectPlugin.login(["public_profile"], fbLoginSuccess,
+facebookConnectPlugin.login(["public_profile", "email"], fbLoginSuccess,
   function (error) {
     alert("ERROR: "+JSON.stringify(error))
   }
