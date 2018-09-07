@@ -60,6 +60,10 @@
 <splash density="port-xhdpi" src="res/screen/android/splash-port-xhdpi.png"/>
 <splash density="port-xxhdpi" src="res/screen/android/splash-port-xxhdpi.png"/>
 <splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png"/>
+<config-file parent="/resources" target="./res/values/strings.xml">
+    <string name="fb_app_id">1561631040639833</string>
+    <string name="fb_app_name">FamClub</string>
+</config-file>
 </platform>
     <platform name="windows">
         <icon src="res/icon/windows/storelogo.png" target="StoreLogo"/>
