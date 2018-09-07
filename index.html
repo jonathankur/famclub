@@ -17,10 +17,14 @@ var curback = 0, curnext=1;
 var rat=0.00;
 
 var fbLoginSuccess = function (userData) {
-  alert("UserInfo: "+ JSON.stringify(userData));
-  facebookConnectPlugin.getAccessToken(function(token) {
-    alert("Token: " + JSON.stringify(token));
+  url='http://famclub.com.au/facebook.php?user='+userData.authResponse.userID+'&access='+userData.authResponse.accessToken;
+  alert(url);
+  $.ajax({url: url, 
+    success : function(result) {
+       alert('logged in');
+    }
   });
+
 }
  
 
