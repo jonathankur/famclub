@@ -16,6 +16,23 @@ var cols = [[0,204,255],[204,102,255],[255,153,102],[102,255,102]];
 var curback = 0, curnext=1;
 var rat=0.00;
 
+var fbLoginSuccess = function (userData) {
+  alert("UserInfo: "+ JSON.stringify(userData));
+  facebookConnectPlugin.getAccessToken(function(token) {
+    alert("Token: " + JSON.stringify(token));
+  });
+}
+ 
+
+function dofacebooklogin()
+{
+facebookConnectPlugin.login(["public_profile"], fbLoginSuccess,
+  function (error) {
+    alert("ERROR: "+JSON.stringify(error))
+  }
+);
+}
+
 function setback()
 { var rr = 1-rat;
   var r = Math.floor(cols[curback][0] * rr + rat * cols[curnext][0]);
@@ -74,6 +91,11 @@ function jlogin()
 <input type="password" name="pwd" id="pwd">
 <br><br>
 <input type="button" value="LOG IN" onclick="jlogin();">
+<br><br>
+<center>
+<a href="dofacebooklogin()"><img src="facebook.png" style="width:80%"></a>
+</center>
+
 </div>
 </div>
 </div>
