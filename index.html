@@ -75,10 +75,12 @@ function jlogout()
 
 function jlogin()
 {  url='http://famclub.com.au/login.php?email='+encodeURIComponent($("#email").val())+"&pwd="+encodeURIComponent($("#pwd").val());
+console.log(url);
    $.ajax({url: url, 
     success : function(result) {
+     console.log(result);
        var r = result.split('~');
-       
+       alert(r[0]);
        if (r[0]=='s') {
            window.localStorage.setItem('me',r[1]);
            window.localStorage.setItem('myname',r[2]);
@@ -90,7 +92,12 @@ function jlogin()
          setTimeout(hideerr,1500);
        }
        if (r[0]=='n') {
-          jQuery.mobile.changePage("#registerpage", {transition: "flip"});
+          $("#em").html('<b>'+$("#email").val()+'</b>');
+          $("#fname").val('');
+          $("#lname").val('');
+          $("#sub").val('');
+alert('changing');
+          jQuery.mobile.changePage("#regpage", {transition: "flip"});
        }
     }
    });
@@ -117,7 +124,7 @@ function hideerr()
 <p><input type="email" name="email" id="email" placeholder="Your Email Address"></p>
 <p><input type="password" name="pwd" id="pwd" placeholder="Password"></p>
 <p>
-<input type="button" value="LOG IN" onclick="jlogin();"></p>
+<a href="jlogin()" class="ui-btn">LOG IN</a>
 <br>
 <div id="err" style="color:white; background-color:red; padding:3px;display:none">Error</div>
 <br>
@@ -131,6 +138,23 @@ function hideerr()
 </div>
 
 </div>
+</div>
+</div>
+
+<div data-role="page" id="regpage" class="mypg myback">
+ <div role="main" class="ui-content myback">
+ <a href="jlogout()" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-back ui-btn-icon-notext ui-btn-right">Close</a>
+<center>
+<img src="logo.png" style="width:50%">
+<br><br>
+<p><b>New FamClub Member</b></p>
+</center>
+<p>We haven't seen that email address before.  Please enter your details below for email address :-<br>
+<span id="em"></em></p>
+<input type="text" name="fname" id="fname" placeholder="First Name">
+<input type="text" name="lname" id="lname" placeholder="Last Name">
+<input type="text" name="suburb" id="suburb" placeholder="Suburb or Town">
+<input type="button" value="SIGN UP" onclick="register()">
 </div>
 </div>
 
