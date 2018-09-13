@@ -12,7 +12,8 @@
 	<script src="jquery.mobile-1.4.5.min.js"></script>
 	<script>
 
-var cols = [[0,204,255],[204,102,255],[255,153,102],[102,255,102]];
+// var cols = [[102,255,255],[153,255,153],[255,255,153],[255,153,153],[255,153,255],[153,204,255]];
+var cols=[[204,255,255],[204,204,255],[255,204,255],[255,204,204],[255,255,204],[204,255,204]]; 
 var curback = 0, curnext=1;
 var rat=0.00;
 
@@ -43,13 +44,14 @@ function setback()
   var g = Math.floor(cols[curback][1] * rr + rat * cols[curnext][1]);
   var b = Math.floor(cols[curback][2] * rr + rat * cols[curnext][2]);
   $(".myback").css('background-color','rgb('+r+','+g+','+b+')');
-  rat+=0.01;
+  rat+=0.02;
   if (rat>1) {
      rat=0;
      curback = curnext;
-     if (++curnext>3) curnext=0;
+     if (++curnext>5) curnext=0;
+     setTimeout(setback,1000);
   }
- setTimeout(setback,100);
+  else setTimeout(setback,100);
 }
 
 
@@ -72,9 +74,30 @@ function jlogout()
 }
 
 function jlogin()
-{ 
-   jQuery.mobile.changePage("#fampage", {transition: "flip"});
+{  url='http://famclub.com.au/login.php?email='+encodeURIComponent($("#email").val())+"&pwd="+encodeURIComponent($("#pwd").val());
+   $.ajax({url: url, 
+    success : function(result) {
+       var r = result.split('~');
+       
+       if (r[0]=='s') {
+           window.localStorage.setItem('me',r[1]);
+           window.localStorage.setItem('myname',r[2]);
+           jQuery.mobile.changePage("#fampage", {transition: "flip"});
+       }
+       if (r[0]=='e') {
+         $("#err").html(r[1]);
+         $("#err").show();
+         setTimeout(hideerr,1500);
+       }
+       if (r[0]=='n') {
+          jQuery.mobile.changePage("#registerpage", {transition: "flip"});
+       }
+    }
+   });
+}
 
+function hideerr()
+{ $("#err").hide();
 }
 
 </script>
@@ -86,19 +109,26 @@ function jlogin()
  <div role="main" class="ui-content myback">
 <div name="p1" id="p1" style="display:none">
 <center>
-<img src="logo.png" style="width:50%">
+<img src="logo.png" style="width:50%; margin-bottom:15px">
+<br>
+<a href="#tourpop" data-rel="popup" data-position-to="window" data-transition="fade" class="ui-btn ui-btn-inline ui-icon-navigation ui-btn-icon-right">Take a Tour of this App</a>
+<br><br>-- or log in below --
 </center>
-<label for="email">Email:</label>
-<input type="email" name="email" id="email">
-<br><br>
-<label for="pwd">Password:</label>
-<input type="password" name="pwd" id="pwd">
-<br><br>
-<input type="button" value="LOG IN" onclick="jlogin();">
-<br><br>
+<p><input type="email" name="email" id="email" placeholder="Your Email Address"></p>
+<p><input type="password" name="pwd" id="pwd" placeholder="Password"></p>
+<p>
+<input type="button" value="LOG IN" onclick="jlogin();"></p>
+<br>
+<div id="err" style="color:white; background-color:red; padding:3px;display:none">Error</div>
+<br>
 <center>
 <img src="facebook.png" style="width:80%" onclick="dofacebooklogin()">
 </center>
+<div data-role="popup" id="tourpop">
+ <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+ <p>Welcome to FamClub!</p>
+ <p>Here our aim is to contribute to happy, smooth-running families where everybody feels that their needs and feelings are being considered and there is open dialogue between family members</p>
+</div>
 
 </div>
 </div>
