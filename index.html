@@ -22,7 +22,9 @@ var fbLoginSuccess = function (userData) {
   alert(url);
   $.ajax({url: url, 
     success : function(result) {
-       alert('logged in');
+           window.localStorage.setItem('me',result.user);
+           window.localStorage.setItem('myname',result.firstname);
+           gofam();
     }
   });
 
@@ -59,7 +61,7 @@ function jkinit()
 { var me = window.localStorage.getItem('me');
   if (!me) me='';
   if (me.length) {
-   jQuery.mobile.changePage("#fampage", {transition: "flip"});
+    gofam(me);
   }
   else {
      $("#p1").show();
@@ -68,9 +70,15 @@ function jkinit()
 }
 
 function jlogout()
-{  window.localStorage.removeItem('me');
+{  
+window.localStorage.removeItem('me');
    $("#p1").show();
    jQuery.mobile.changePage("#intropage", {transition: "flip"});
+}
+
+function newfam()
+{  
+   jQuery.mobile.changePage("#newfam", {transition: "flip"});
 }
 
 function jlogin()
@@ -80,11 +88,10 @@ console.log(url);
     success : function(result) {
      console.log(result);
        var r = result.split('~');
-       alert(r[0]);
        if (r[0]=='s') {
            window.localStorage.setItem('me',r[1]);
            window.localStorage.setItem('myname',r[2]);
-           jQuery.mobile.changePage("#fampage", {transition: "flip"});
+           gofam();
        }
        if (r[0]=='e') {
          $("#err").html(r[1]);
@@ -96,15 +103,104 @@ console.log(url);
           $("#fname").val('');
           $("#lname").val('');
           $("#sub").val('');
-alert('changing');
           jQuery.mobile.changePage("#regpage", {transition: "flip"});
        }
     }
    });
 }
 
+function gofam()
+{ $("#famdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
+  jQuery.mobile.changePage("#fampage", {transition: "flip"});
+  url='http://famclub.com.au/getfams.php?user='+encodeURIComponent(window.localStorage.getItem('me'));
+  console.log(url);
+  $.ajax({url: url, 
+    success : function(result) {
+      $("#famdata").html(result);
+      $("#famdata").trigger('create');
+      
+    }
+  });
+}
+
+function enterfam(a)
+{ $("#infamdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
+  jQuery.mobile.changePage("#infampage", {transition: "flip"});
+  url='http://famclub.com.au/enterfam.php?id='+a;
+  console.log(url);
+  $.ajax({url: url, 
+    success : function(result) {
+      $("#infamdata").html(result);
+      $("#infamdata").trigger('create');
+    }
+  });
+}
+
+function accept(a)
+{ url='http://famclub.com.au/getfams.php?accept='+a+'&user='+encodeURIComponent(window.localStorage.getItem('me'));
+  console.log(url);
+  $.ajax({url: url, 
+    success : function(result) {
+      $("#famdata").html(result);
+      $("#famdata").trigger('create');
+    }
+  });
+}
+
+function reject(a)
+{ if (confirm('Decline this Invitation - Are You Sure?')) {
+  url='http://famclub.com.au/getfams.php?reject='+a+'&user='+encodeURIComponent(window.localStorage.getItem('me'));
+  $.ajax({url: url, 
+    success : function(result) {
+      $("#famdata").html(result);
+      $("#famdata").trigger('create');
+    }
+  });
+  }
+}
+
+
 function hideerr()
 { $("#err").hide();
+}
+
+function register()
+{ url='http://famclub.com.au/register.php?data='+encodeURIComponent($("#email").val()+'~'+$("#pwd").val()+'~'+$("#fname").val()+'~'+$("#lname").val());
+  console.log(url);
+  $.ajax({url: url, 
+    success : function(result) {
+      r=result.split('~');
+      if (r[0]>0) {
+        window.localStorage.setItem('me',r[0]);
+        window.localStorage.setItem('myname',r[1]);
+        gofam(); 
+     }
+      else jlogout();
+    }
+  });
+}
+
+function createfam()
+{ 
+url='http://famclub.com.au/newfam.php?data='+encodeURIComponent($("#famname").val()+'~'+$("#famsub").val()+'~'+window.localStorage.getItem('me'));
+  console.log(url);
+  $.ajax({url: url, 
+    success : function(result) {
+      r=result.split('~');
+      if (r[0]>0) {
+        enterfam(r[0]);
+      }
+      else {
+        $("#ferr").html(r[1]);
+        $("#ferr").show();
+        setTimeout(hideferr,1500); 
+      }
+    }
+  });
+}
+
+function hideferr()
+{ $("#ferr").hide();
 }
 
 </script>
@@ -124,7 +220,7 @@ function hideerr()
 <p><input type="email" name="email" id="email" placeholder="Your Email Address"></p>
 <p><input type="password" name="pwd" id="pwd" placeholder="Password"></p>
 <p>
-<a href="jlogin()" class="ui-btn">LOG IN</a>
+<a href="javascript:jlogin()" class="ui-btn ui-corner-all">LOG IN</a>
 <br>
 <div id="err" style="color:white; background-color:red; padding:3px;display:none">Error</div>
 <br>
@@ -143,31 +239,52 @@ function hideerr()
 
 <div data-role="page" id="regpage" class="mypg myback">
  <div role="main" class="ui-content myback">
- <a href="jlogout()" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-back ui-btn-icon-notext ui-btn-right">Close</a>
+ <a href="javascript:jlogout()" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-back ui-btn-icon-notext ui-btn-right">Close</a>
 <center>
 <img src="logo.png" style="width:50%">
 <br><br>
 <p><b>New FamClub Member</b></p>
 </center>
 <p>We haven't seen that email address before.  Please enter your details below for email address :-<br>
-<span id="em"></em></p>
+<span id="em"></span></p>
 <input type="text" name="fname" id="fname" placeholder="First Name">
 <input type="text" name="lname" id="lname" placeholder="Last Name">
-<input type="text" name="suburb" id="suburb" placeholder="Suburb or Town">
-<input type="button" value="SIGN UP" onclick="register()">
+<a href="javascript:register()" class="ui-btn ui-corner-all">SIGN UP</a>
+</div>
+</div>
+
+<div data-role="page" id="newfam" class="mypg myback">
+ <div role="main" class="ui-content myback">
+ <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-back ui-btn-icon-notext ui-btn-right">Close</a>
+<center>
+<img src="logo.png" style="width:50%">
+<br><br>
+<p><b>New Family</b></p>
+</center>
+<p>Let's set up a new family and then invite people to join</p>
+<input type="text" name="famname" id="famname" placeholder="Family Name">
+<input type="text" name="famsub" id="famsub" placeholder="Suburb or Town">
+<a href="javascript:createfam()" class="ui-btn ui-corner-all">CREATE FAMILY</a>
+<br><p>e.g. If you enter 'Smith' and 'Yokine' then your family will appear as 'The Smith Family from Yokine'</p>
 </div>
 </div>
 
 <div data-role="page" id="fampage" class="mypg myback">
  <div role="main" class="ui-content myback">
 <center>
-<img src="logo.png" style="width:50%">
+<img src="logo.png" style="width:50%; margin-bottom:5px">
 </center>
-<p>Choose a Family</p>
-<input type="button" value="LOG IN" onclick="alert(cols[1][2]);">
+<div id="famdata" style="padding:15px">
+</div>
+ </div>
+</div>
 
-<div data-role="footer" onclick="jlogout()" data-fullscreen="true" data-position="fixed">
-<h4>Log Out</h4>
+<div data-role="page" id="infampage" class="mypg myback">
+ <div role="main" class="ui-content myback">
+<center>
+<img src="logo.png" style="width:50%; margin-bottom:5px">
+</center>
+<div id="infamdata" style="padding:15px">
 </div>
  </div>
 </div>
