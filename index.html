@@ -16,6 +16,7 @@
 var cols=[[204,255,255],[204,204,255],[255,204,255],[255,204,204],[255,255,204],[204,255,204]]; 
 var curback = 0, curnext=1;
 var rat=0.00;
+var thisfam=0;
 
 var fbLoginSuccess = function (userData) {
   url='http://famclub.com.au/facebook.php?user='+userData.authResponse.userID+'&access='+userData.authResponse.accessToken;
@@ -127,7 +128,9 @@ function gofam()
 }
 
 function enterfam(a)
-{ $("#infamdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
+{ thisfam=a;
+  $("#infamdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
+  $("#neweml").val('');
   jQuery.mobile.changePage("#infampage", {transition: "flip"});
   url='http://famclub.com.au/enterfam.php?id='+a;
   console.log(url);
@@ -135,6 +138,16 @@ function enterfam(a)
     success : function(result) {
       $("#infamdata").html(result);
       $("#infamdata").trigger('create');
+    }
+  });
+}
+
+function invite()
+{ url='http://famclub.com.au/invite.php?id='+thisfam+'&email='+encodeURIComponent($("#neweml").val());
+  console.log(url);
+  $.ajax({url: url, 
+    success : function(result) {
+      enterfam(thisfam);
     }
   });
 }
@@ -287,7 +300,11 @@ function hideferr()
 <center>
 <img src="logo.png" style="width:50%; margin-bottom:5px">
 </center>
-<div id="infamdata" style="padding:15px">
+<div style="padding:15px">
+  <div id="infamdata" style="margin-bottom:20px">
+  </div>
+  <input type="text" name="neweml" id="neweml" placeholder="Email Address to Invite"><a href="javascript:invite();" class="ui-btn ui-corner-all">INVITE</a>
+  <a href="javascript:gofam()" class="ui-btn ui-corner-all" style="margin-top:30px">Leave Family</a>
 </div>
  </div>
 </div>
