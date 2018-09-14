@@ -21,10 +21,13 @@ var fbLoginSuccess = function (userData) {
   url='http://famclub.com.au/facebook.php?user='+userData.authResponse.userID+'&access='+userData.authResponse.accessToken;
   $.ajax({url: url, 
     success : function(result) {
-           alert(JSON.stringify(result));
-           window.localStorage.setItem('me',result.user);
-           window.localStorage.setItem('myname',result.firstname);
-           gofam();
+           r=result.split('~');
+           if (r[0]) {
+             window.localStorage.setItem('me',r[0]);
+             window.localStorage.setItem('myname',r[1]);
+             gofam();
+           }
+           else jlogout();
     }
   });
 
@@ -265,7 +268,7 @@ function hideferr()
 <input type="text" name="famname" id="famname" placeholder="Family Name">
 <input type="text" name="famsub" id="famsub" placeholder="Suburb or Town">
 <a href="javascript:createfam()" class="ui-btn ui-corner-all">CREATE FAMILY</a>
-<br><p>e.g. If you enter 'Smith' and 'Yokine' then your family will appear as 'The Smith Family from Yokine'</p>
+<br><div id="ferr" style="display:none; color:white; background-color:red; padding:10px"></div><p>e.g. If you enter 'Smith' and 'Yokine' then your family will appear as 'The Smith Family from Yokine'</p>
 </div>
 </div>
 
