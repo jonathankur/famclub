@@ -19,9 +19,9 @@ var rat=0.00;
 
 var fbLoginSuccess = function (userData) {
   url='http://famclub.com.au/facebook.php?user='+userData.authResponse.userID+'&access='+userData.authResponse.accessToken;
-  alert(url);
   $.ajax({url: url, 
     success : function(result) {
+           alert(JSON.stringify(result));
            window.localStorage.setItem('me',result.user);
            window.localStorage.setItem('myname',result.firstname);
            gofam();
