@@ -129,15 +129,36 @@ function gofam()
 
 function enterfam(a)
 { thisfam=a;
+  members();
+}
+
+function members()
+{
   $("#infamdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
   $("#neweml").val('');
   jQuery.mobile.changePage("#infampage", {transition: "flip"});
-  url='http://famclub.com.au/enterfam.php?id='+a;
+  url='http://famclub.com.au/enterfam.php?id='+thisfam;
   console.log(url);
   $.ajax({url: url, 
     success : function(result) {
       $("#infamdata").html(result);
       $("#infamdata").trigger('create');
+    }
+  });
+}
+
+
+function goshopping()
+{
+  $("#shopdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
+  $("#newshop").val('');
+  jQuery.mobile.changePage("#shoppingpage", {transition: "flip"});
+  url='http://famclub.com.au/shopping.php?id='+thisfam;
+  console.log(url);
+  $.ajax({url: url, 
+    success : function(result) {
+      $("#shopdata").html(result);
+      $("#shopdata").trigger('create');
     }
   });
 }
@@ -297,6 +318,7 @@ function hideferr()
 
 <div data-role="page" id="infampage" class="mypg myback">
  <div role="main" class="ui-content myback">
+<a href="#menupanel" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-mini">Menu</a>
 <center>
 <img src="logo.png" style="width:50%; margin-bottom:5px">
 </center>
@@ -304,9 +326,46 @@ function hideferr()
   <div id="infamdata" style="margin-bottom:20px">
   </div>
   <input type="text" name="neweml" id="neweml" placeholder="Email Address to Invite"><a href="javascript:invite();" class="ui-btn ui-corner-all">INVITE</a>
-  <a href="javascript:gofam()" class="ui-btn ui-corner-all" style="margin-top:30px">Leave Family</a>
 </div>
  </div>
+	<div data-role="panel" id="menupanel" data-position="left" data-display="overlay" data-theme="a">
+        <div data-role="controlgroup">
+         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+         <a href="" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
+         <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
+         <a href="" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
+         <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
+ 
+	</div>
+
+        <a href="" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">Close Menu</a>
+	</div>
+</div>
+
+<div data-role="page" id="shoppingpage" class="mypg myback">
+ <div role="main" class="ui-content myback">
+<a href="#smenupanel" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-mini">Menu</a>
+<center>
+<img src="logo.png" style="width:50%; margin-bottom:5px">
+</center>
+<div style="padding:15px">
+  <div id="shopdata" style="margin-bottom:20px">
+  </div>
+  <input type="text" name="newshop" id="newshop" placeholder="New Item to Add to List"><a href="javascript:addtoshop();" class="ui-btn ui-corner-all">ADD ITEM</a>
+</div>
+ </div>
+	<div data-role="panel" id="smenupanel" data-position="left" data-display="overlay" data-theme="a">
+        <div data-role="controlgroup">
+         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+         <a href="" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
+         <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
+         <a href="" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
+         <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
+ 
+	</div>
+
+        <a href="" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">Close Menu</a>
+	</div>
 </div>
 
 </body>
