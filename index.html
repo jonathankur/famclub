@@ -12,11 +12,27 @@
 	<script src="jquery.mobile-1.4.5.min.js"></script>
 	<script>
 
-// var cols = [[102,255,255],[153,255,153],[255,255,153],[255,153,153],[255,153,255],[153,204,255]];
 var cols=[[204,255,255],[204,204,255],[255,204,255],[255,204,204],[255,255,204],[204,255,204]]; 
 var curback = 0, curnext=1;
 var rat=0.00;
 var thisfam=0;
+var logOb;
+var fileURL='';
+var nameFile, fsroot=null;
+
+document.addEventListener('deviceready', onDeviceReady, false);
+
+function onDeviceReady() {
+	window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dir) {
+          fsroot=dir;
+		dir.getFile("log.jpg", {create:true}, function(file) {
+			logOb = file;
+                fileURL = logOb.toURL();
+		});
+
+	});
+
+ }
 
 var fbLoginSuccess = function (userData) {
   url='http://famclub.com.au/facebook.php?user='+userData.authResponse.userID+'&access='+userData.authResponse.accessToken;
@@ -50,7 +66,7 @@ function setback()
   var g = Math.floor(cols[curback][1] * rr + rat * cols[curnext][1]);
   var b = Math.floor(cols[curback][2] * rr + rat * cols[curnext][2]);
   $(".myback").css('background-color','rgb('+r+','+g+','+b+')');
-  rat+=0.02;
+  rat+=0.025;
   if (rat>1) {
      rat=0;
      curback = curnext;
@@ -60,6 +76,60 @@ function setback()
   else setTimeout(setback,100);
 }
 
+function fail(e) {
+alert('fail: ');
+}
+
+function errorHandler()
+{ alert('error');
+}
+
+function writeLog(b) {
+ 
+    if(!logOb) return;
+    logOb.createWriter(function(fileWriter) {
+fileWriter.onwriteend = function(e) {
+        doupload();
+      };
+		fileWriter.write(b);
+	}, fail);
+}
+
+function takepic()
+{navigator.camera.getPicture(onSuccess, onFail, { quality: 80, targetWidth: 500, targetHeight: 500, 
+    correctOrientation: true, destinationType: Camera.DestinationType.DATA_URL
+  });
+}
+
+function onSuccess(imageData) {
+    writeLog(imageData);
+}
+
+function onFail(message) {
+    alert('Failed because: ' + message);
+}
+
+var win = function (r) {
+     alert('done win');
+}
+
+var fail = function (error) {
+   alert("An error has occurred: Code = " + error.code);
+}
+
+function doupload()
+{
+ var options = new FileUploadOptions();
+ options.fileKey = "file";
+ options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+ options.mimeType = "application/base64";
+ options.trustAllHosts = true;
+ var params = {};
+ params.value1 = window.localStorage.getItem('me').'~'.thisfam;
+ options.params = params;
+ var ft = new FileTransfer();
+ ft.upload(fileURL, encodeURI("http://famclub.com.au/uploadpic.php"), win, fail, options);
+}
 
 function jkinit()
 { var me = window.localStorage.getItem('me');
@@ -331,7 +401,7 @@ function hideferr()
 	<div data-role="panel" id="menupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup">
          <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
-         <a href="" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
+         <a href="javascript:takepic()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
          <a href="" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
@@ -357,7 +427,7 @@ function hideferr()
 	<div data-role="panel" id="smenupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup">
          <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
-         <a href="" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
+         <a href="javascript:takepic()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
          <a href="" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
