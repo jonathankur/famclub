@@ -125,7 +125,7 @@ function doupload()
  options.mimeType = "application/base64";
  options.trustAllHosts = true;
  var params = {};
- params.value1 = window.localStorage.getItem('me').'~'.thisfam;
+ params.value1 = window.localStorage.getItem('me')+'~'+thisfam;
  options.params = params;
  var ft = new FileTransfer();
  ft.upload(fileURL, encodeURI("http://famclub.com.au/uploadpic.php"), win, fail, options);
