@@ -111,7 +111,7 @@ function onFail(message) {
 }
 
 var win = function (r) {
-     alert('done win');
+   //  alert('done win');
 }
 
 var fail = function (error) {
@@ -241,7 +241,7 @@ function gopics()
 }
 
 function viewfam()
-{ $("#phot2").html('<img src="http://famclub.com.au/fampics/f'+thisfam+'.png" style="max-width:100%">');
+{ $("#phot2").html('<img src="http://famclub.com.au/fampics/f'+thisfam+'.png?rnd='+Math.random()+'" style="max-width:100%">');
   $("#phot1").hide();
   $("#phot2").show();
 }
@@ -457,16 +457,20 @@ function hideferr()
  
 
 <div data-role="page" id="picspage" class="mypg myback">
+<div data-role="header" data-fullscreen="true">
+ <div data-role="navbar" style="background-color:#1F483E">
+   <a href="#pmenupanel" class="ui-btn ui-corner-all ui-btn-inline ui-mini">Menu</a>
+   <span style="color:white"> &nbsp; FamClub</span>
+ </div>
+</div>
  <div role="main" class="ui-content myback">
-<a href="#pmenupanel" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-mini">Menu</a>
-<center>
-<img src="logo.png" style="width:50%; margin-bottom:5px">
-</center>
 <div style="padding:15px" id="phot1">
+ <div class="ui-corner-all" style="background-color:#F8F8F8; padding:10px"> 
   <p>Take selfies wherever you are and see them merge into a giant family montage.</p>
   <p>A great way to feel together even if family members are away or busy.</p>
   <p>You never know what will pop up on your family photo so keep checking.</p>
   <p>The best family photos win weekly prizes!</p>
+ </div>
 </div>
 <div id="phot2" style="display:none">
 </div>
