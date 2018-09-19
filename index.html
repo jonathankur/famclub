@@ -12,7 +12,8 @@
 	<script src="jquery.mobile-1.4.5.min.js"></script>
 	<script>
 
-var cols=[[204,255,255],[204,204,255],[255,204,255],[255,204,204],[255,255,204],[204,255,204]]; 
+// var cols=[[204,255,255],[204,204,255],[255,204,255],[255,204,204],[255,255,204],[204,255,204]]; 
+var cols=[[153,255,153],[102,255,204],[153,204,255],[255,153,255],[153,204,255],[102,255,204]];
 var curback = 0, curnext=1;
 var rat=0.00;
 var thisfam=0;
@@ -233,6 +234,18 @@ function goshopping()
   });
 }
 
+function gopics()
+{ $("#phot2").hide();
+  $("#phot1").show();
+  jQuery.mobile.changePage("#picspage", {transition: "flip"});
+}
+
+function viewfam()
+{ $("#phot2").html('<img src="http://famclub.com.au/fampics/f'+thisfam+'.png" style="max-width:100%">');
+  $("#phot1").hide();
+  $("#phot2").show();
+}
+
 function invite()
 { url='http://famclub.com.au/invite.php?id='+thisfam+'&email='+encodeURIComponent($("#neweml").val());
   console.log(url);
@@ -311,6 +324,11 @@ function hideferr()
 }
 
 </script>
+<style type="text/css">
+.ui-panel-inner { 
+  padding: 0 !important;
+}
+</style>
 </head>
 <body onload="jkinit()">
 
@@ -401,13 +419,12 @@ function hideferr()
 	<div data-role="panel" id="menupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup">
          <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
-         <a href="javascript:takepic()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
+         <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
          <a href="" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
-
         <a href="" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">Close Menu</a>
 	</div>
 </div>
@@ -425,9 +442,48 @@ function hideferr()
 </div>
  </div>
 	<div data-role="panel" id="smenupanel" data-position="left" data-display="overlay" data-theme="a">
-        <div data-role="controlgroup">
+        <div data-role="controlgroup" >
          <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
-         <a href="javascript:takepic()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
+         <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
+         <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
+         <a href="" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
+         <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
+ 
+	</div>
+
+        <a href="" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">Close Menu</a>
+	</div>
+</div>
+ 
+
+<div data-role="page" id="picspage" class="mypg myback">
+ <div role="main" class="ui-content myback">
+<a href="#pmenupanel" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-mini">Menu</a>
+<center>
+<img src="logo.png" style="width:50%; margin-bottom:5px">
+</center>
+<div style="padding:15px" id="phot1">
+  <p>Take selfies wherever you are and see them merge into a giant family montage.</p>
+  <p>A great way to feel together even if family members are away or busy.</p>
+  <p>You never know what will pop up on your family photo so keep checking.</p>
+  <p>The best family photos win weekly prizes!</p>
+</div>
+<div id="phot2" style="display:none">
+</div>
+</div>
+    <div data-role="footer"  data-fullscreen="true" data-position="fixed">
+      <div data-role="navbar" data-iconpos="bottom">
+        <ul>
+	   <li><a href="javascript:takepic()" data-icon="camera">Take Photo</a></li>
+          <li><a href="javascript:viewfam()" data-icon="eye">View MashUp</a></li>
+        </ul>
+     </div>
+   </div> 
+
+	<div data-role="panel" id="pmenupanel" data-position="left" data-display="overlay" data-theme="a">
+        <div data-role="controlgroup" >
+         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+         <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
          <a href="" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
