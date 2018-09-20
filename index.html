@@ -234,6 +234,21 @@ function goshopping()
   });
 }
 
+function goact()
+{
+  $("#act1").html('<center><img src="loading.gif" style="max-width:80%"></center>');
+  jQuery.mobile.changePage("#actpage", {transition: "flip"});
+  url='http://famclub.com.au/getact.php?id='+thisfam;
+  console.log(url);
+  $.ajax({url: url, 
+    success : function(result) {
+      $("#act1").html(result);
+      $("#act1").trigger('create');
+    }
+  });
+}
+
+
 function gopics()
 { $("#phot2").hide();
   $("#phot1").show();
@@ -421,11 +436,11 @@ function hideferr()
          <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
-         <a href="" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
+         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
-        <a href="" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">Close Menu</a>
+        <a href="" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left">Close Menu</a>
 	</div>
 </div>
 
@@ -446,12 +461,12 @@ function hideferr()
          <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
-         <a href="" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
+         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
 
-        <a href="" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">Close Menu</a>
+        <a href="" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left">Close Menu</a>
 	</div>
 </div>
  
@@ -489,12 +504,39 @@ function hideferr()
          <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
-         <a href="" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
+         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
 
-        <a href="" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">Close Menu</a>
+        <a href="" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left">Close Menu</a>
+	</div>
+</div>
+
+<div data-role="page" id="actpage" class="mypg myback">
+<div data-role="header" data-fullscreen="true">
+ <div data-role="navbar" style="background-color:#1F483E">
+   <a href="#amenupanel" class="ui-btn ui-corner-all ui-btn-inline ui-mini">Menu</a>
+   <span style="color:white"> &nbsp; FamClub</span>
+ </div>
+</div>
+ <div role="main" class="ui-content myback">
+<div style="padding:15px" id="act1">
+
+</div>
+</div>
+
+	<div data-role="panel" id="amenupanel" data-position="left" data-display="overlay" data-theme="a">
+        <div data-role="controlgroup" >
+         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+         <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
+         <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
+         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
+         <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
+ 
+	</div>
+
+        <a href="" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left">Close Menu</a>
 	</div>
 </div>
 
