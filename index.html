@@ -109,7 +109,7 @@ function getonestatus()
 }
 
 function savePush(s)
-{ url='http://famclub.com.au/savepush.php?id='+s+'&picnum='+encodeURIComponent(window.localStorage.getItem('picnum'));
+{ url='http://famclub.com.au/savepush.php?pushid='+s+'&id='+window.localStorage.getItem('me');
   $.ajax({url: url, 
     success : function(result) {
     }
