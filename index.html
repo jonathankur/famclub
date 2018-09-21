@@ -80,9 +80,7 @@ function setback()
 
   var notificationOpenedCallback = function(jsonData) {
 
-  jQuery.mobile.changePage("#fampage", {transition: "flip"});
-      $("#famdata").html(jsonData);
-      $("#famdata").trigger('create');
+ 
       
   };
 
@@ -95,7 +93,6 @@ function getonestatus()
     .endInit();
 
   window.plugins.OneSignal.getPermissionSubscriptionState(function(status) {
-    alert(JSON.stringify(status));
       var ss = status.subscriptionStatus.userId;
      if ((ss!=null) && (ss.length>0)) savePush(ss);
       else {
@@ -107,7 +104,6 @@ function getonestatus()
 
 function savePush(s)
 { url='http://famclub.com.au/savepush.php?pushid='+s+'&id='+window.localStorage.getItem('me');
-alert(url);
   $.ajax({url: url, 
     success : function(result) {
     }
