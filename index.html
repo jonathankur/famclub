@@ -20,6 +20,7 @@ var thisfam=0;
 var logOb;
 var fileURL='';
 var nameFile, fsroot=null;
+var keeptrying=6;
 
 document.addEventListener('deviceready', onDeviceReady, false);
 
@@ -76,6 +77,45 @@ function setback()
   }
   else setTimeout(setback,100);
 }
+
+  var notificationOpenedCallback = function(jsonData) {
+
+  jQuery.mobile.changePage("#fampage", {transition: "flip"});
+      $("#famdata").html(jsonData);
+      $("#famdata").trigger('create');
+      
+  };
+
+function initonesignal()
+{
+  window.plugins.OneSignal
+    .startInit("47d512d3-9681-4f48-848f-78d7bc9a2cf5")
+    .handleNotificationOpened(notificationOpenedCallback)
+    .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.Notification)
+    .endInit();
+}
+
+
+function getonestatus()
+{
+  window.plugins.OneSignal.getPermissionSubscriptionState(function(status) {
+      var ss = status.subscriptionStatus.userId;
+     if ((ss!=null) && (ss.length>0)) savePush(ss);
+      else {
+       if (--keeptrying>0)
+         setTimeout(getonestatus(),1000);
+      }
+  }); 
+}
+
+function savePush(s)
+{ url='http://famclub.com.au/savepush.php?id='+s+'&picnum='+encodeURIComponent(window.localStorage.getItem('picnum'));
+  $.ajax({url: url, 
+    success : function(result) {
+    }
+  });
+}
+
 
 function fail(e) {
 alert('fail: ');
@@ -189,7 +229,13 @@ function gofam()
 { $("#famdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
   jQuery.mobile.changePage("#fampage", {transition: "flip"});
   url='http://famclub.com.au/getfams.php?user='+encodeURIComponent(window.localStorage.getItem('me'));
-  console.log(url);
+  try {
+   getonestatus();
+  }
+  catch {
+
+  };
+
   $.ajax({url: url, 
     success : function(result) {
       $("#famdata").html(result);
