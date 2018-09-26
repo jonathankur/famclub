@@ -2,7 +2,7 @@
     <widget xmlns   = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "au.com.famclub"
-        version     = "1.0.0" >
+        version     = "1.0.1" >
 
     <!-- versionCode is optional and Android only -->
 
@@ -109,6 +109,9 @@
 <access origin="http://famclub.com.au" subdomains="true" />
 <plugin name="cordova-android-support-gradle-release" source="npm" />
 <edit-config target="NSCameraUsageDescription" file="*-Info.plist" mode="merge">
+    <string>add selfies to your family picture</string>
+</edit-config>
+<edit-config target="NSPhotoLibraryUsageDescription" file="*-Info.plist" mode="merge">
     <string>add selfies to your family picture</string>
 </edit-config>
 </widget>
