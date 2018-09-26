@@ -17,6 +17,7 @@ var cols=[[153,255,153],[102,255,204],[153,204,255],[255,153,255],[153,204,255],
 var curback = 0, curnext=1;
 var rat=0.00;
 var thisfam=0;
+var me=0;
 var logOb;
 var fileURL='';
 var nameFile, fsroot=null;
@@ -103,13 +104,27 @@ function getonestatus()
 }
 
 function savePush(s)
-{ url='http://famclub.com.au/savepush.php?pushid='+s+'&id='+window.localStorage.getItem('me');
+{ url='http://famclub.com.au/savepush.php?pushid='+s+'&id='+me;
   $.ajax({url: url, 
     success : function(result) {
     }
   });
 }
 
+function asubmit()
+{ var url='http://famclub.com.au/asave.php';
+  var data = {
+     member : me,
+     family : thisfam,
+     qlist : $("#qlist").val(),
+     why : $("#why").val(),
+     chosen : $("#member").val()
+  }
+  $.post(url,data)
+  .done(function(result) {
+     goact();
+  });
+}
 
 function fail(e) {
 alert('fail: ');
@@ -161,16 +176,17 @@ function doupload()
  options.mimeType = "application/base64";
  options.trustAllHosts = true;
  var params = {};
- params.value1 = window.localStorage.getItem('me')+'~'+thisfam;
+ params.value1 = me+'~'+thisfam;
  options.params = params;
  var ft = new FileTransfer();
  ft.upload(fileURL, encodeURI("http://famclub.com.au/uploadpic.php"), win, fail, options);
 }
 
 function jkinit()
-{ var me = window.localStorage.getItem('me');
-  if (!me) me='';
-  if (me.length) {
+{ var lme = window.localStorage.getItem('me');
+  if (!lme) lme='';
+  if (lme.length) {
+    me=lme;
     gofam(me);
   }
   else {
@@ -182,6 +198,7 @@ function jkinit()
 function jlogout()
 {  
 window.localStorage.removeItem('me');
+ me='';
    $("#p1").show();
    jQuery.mobile.changePage("#intropage", {transition: "flip"});
 }
@@ -201,6 +218,7 @@ console.log(url);
        if (r[0]=='s') {
            window.localStorage.setItem('me',r[1]);
            window.localStorage.setItem('myname',r[2]);
+           me=r[1];		
            gofam();
        }
        if (r[0]=='e') {
@@ -222,7 +240,7 @@ console.log(url);
 function gofam()
 { $("#famdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
   jQuery.mobile.changePage("#fampage", {transition: "flip"});
-  url='http://famclub.com.au/getfams.php?user='+encodeURIComponent(window.localStorage.getItem('me'));
+  url='http://famclub.com.au/getfams.php?user='+me;
   try {
    getonestatus();
   }
@@ -266,7 +284,6 @@ function goshopping()
   $("#newshop").val('');
   jQuery.mobile.changePage("#shoppingpage", {transition: "flip"});
   url='http://famclub.com.au/shopping.php?id='+thisfam;
-  console.log(url);
   $.ajax({url: url, 
     success : function(result) {
       $("#shopdata").html(result);
@@ -279,8 +296,7 @@ function goact()
 {
   $("#act1").html('<center><img src="loading.gif" style="max-width:80%"></center>');
   jQuery.mobile.changePage("#actpage", {transition: "flip"});
-  url='http://famclub.com.au/getact.php?id='+thisfam;
-  console.log(url);
+  url='http://famclub.com.au/getact.php?id='+thisfam+'&me='+me;
   $.ajax({url: url, 
     success : function(result) {
       $("#act1").html(result);
@@ -289,6 +305,17 @@ function goact()
   });
 }
 
+function viewpast(n)
+{
+  $("#act1").html('<center><img src="loading.gif" style="max-width:80%"></center>');
+  url='http://famclub.com.au/viewpast.php?id='+thisfam+'&me='+me+'&num='+n;
+  $.ajax({url: url, 
+    success : function(result) {
+      $("#act1").html(result);
+      $("#act1").trigger('create');
+    }
+  });
+}
 
 function gopics()
 { $("#phot2").hide();
@@ -313,7 +340,7 @@ function invite()
 }
 
 function accept(a)
-{ url='http://famclub.com.au/getfams.php?accept='+a+'&user='+encodeURIComponent(window.localStorage.getItem('me'));
+{ url='http://famclub.com.au/getfams.php?accept='+a+'&user='+me;
   console.log(url);
   $.ajax({url: url, 
     success : function(result) {
@@ -325,7 +352,7 @@ function accept(a)
 
 function reject(a)
 { if (confirm('Decline this Invitation - Are You Sure?')) {
-  url='http://famclub.com.au/getfams.php?reject='+a+'&user='+encodeURIComponent(window.localStorage.getItem('me'));
+  url='http://famclub.com.au/getfams.php?reject='+a+'&user='+me;
   $.ajax({url: url, 
     success : function(result) {
       $("#famdata").html(result);
@@ -349,6 +376,7 @@ function register()
       if (r[0]>0) {
         window.localStorage.setItem('me',r[0]);
         window.localStorage.setItem('myname',r[1]);
+        me=r[0];
         gofam(); 
      }
       else jlogout();
@@ -358,7 +386,7 @@ function register()
 
 function createfam()
 { 
-url='http://famclub.com.au/newfam.php?data='+encodeURIComponent($("#famname").val()+'~'+$("#famsub").val()+'~'+window.localStorage.getItem('me'));
+url='http://famclub.com.au/newfam.php?data='+encodeURIComponent($("#famname").val()+'~'+$("#famsub").val()+'~'+me);
   console.log(url);
   $.ajax({url: url, 
     success : function(result) {
@@ -410,8 +438,12 @@ function hideferr()
 </center>
 <div data-role="popup" id="tourpop">
  <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
- <p>Welcome to FamClub!</p>
+ <div style="padding:10px">
+ <p><b>Welcome to FamClub!</b></p>
  <p>Here our aim is to contribute to happy, smooth-running families where everybody feels that their needs and feelings are being considered and there is open dialogue between family members</p>
+ <p>Log-In with Facebook or by creating an email address and password and see if you have been invited into any families.</p>
+ <p>If not, create your own family and invite people to join.</p>
+ </div>
 </div>
 
 </div>
@@ -474,10 +506,10 @@ function hideferr()
  </div>
 	<div data-role="panel" id="menupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup">
-         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Today's Activity</a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
-         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
+         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
@@ -499,10 +531,10 @@ function hideferr()
  </div>
 	<div data-role="panel" id="smenupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup" >
-         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Today's Activity</a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
-         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
+         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
@@ -542,10 +574,10 @@ function hideferr()
 
 	<div data-role="panel" id="pmenupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup" >
-         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Today's Activity</a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
-         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
+         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
@@ -569,10 +601,10 @@ function hideferr()
 
 	<div data-role="panel" id="amenupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup" >
-         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Today's Activity</a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
-         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Send Message</a>
+         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
