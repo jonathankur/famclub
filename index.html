@@ -18,24 +18,7 @@ var curback = 0, curnext=1;
 var rat=0.00;
 var thisfam=0;
 var me=0;
-var logOb;
-var fileURL='';
-var nameFile, fsroot=null;
 var keeptrying=6;
-
-document.addEventListener('deviceready', onDeviceReady, false);
-
-function onDeviceReady() {
-	window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dir) {
-          fsroot=dir;
-		dir.getFile("log.jpg", {create:true}, function(file) {
-			logOb = file;
-                fileURL = logOb.toURL();
-		});
-
-	});
-
- }
 
 var fbLoginSuccess = function (userData) {
   url='http://famclub.com.au/facebook.php?user='+userData.authResponse.userID+'&access='+userData.authResponse.accessToken;
@@ -134,17 +117,6 @@ function errorHandler()
 { alert('error');
 }
 
-function writeLog(b) {
- 
-    if(!logOb) return;
-    logOb.createWriter(function(fileWriter) {
-fileWriter.onwriteend = function(e) {
-        doupload();
-      };
-		fileWriter.write(b);
-	}, fail);
-}
-
 function takepic()
 {navigator.camera.getPicture(onSuccess, onFail, { quality: 80, targetWidth: 500, targetHeight: 500, 
     correctOrientation: true, destinationType: Camera.DestinationType.DATA_URL
@@ -152,34 +124,16 @@ function takepic()
 }
 
 function onSuccess(imageData) {
-    writeLog(imageData);
-}
-
-function onFail(message) {
-    alert('Failed because: ' + message);
-}
-
-var win = function (r) {
-   //  alert('done win');
-  viewfam();
-}
-
-var fail = function (error) {
-   alert("An error has occurred: Code = " + error.code);
-}
-
-function doupload()
-{
- var options = new FileUploadOptions();
- options.fileKey = "file";
- options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
- options.mimeType = "application/base64";
- options.trustAllHosts = true;
- var params = {};
- params.value1 = me+'~'+thisfam;
- options.params = params;
- var ft = new FileTransfer();
- ft.upload(fileURL, encodeURI("http://famclub.com.au/uploadpic.php"), win, fail, options);
+{ var url='http://famclub.com.au/uppic.php';
+  var data = {
+     member : me,
+     family : thisfam,
+     pic : imageData
+  }
+  $.post(url,data)
+  .done(function(result) {
+     viewfam();
+  });
 }
 
 function jkinit()
@@ -210,10 +164,8 @@ function newfam()
 
 function jlogin()
 {  url='http://famclub.com.au/login.php?email='+encodeURIComponent($("#email").val())+"&pwd="+encodeURIComponent($("#pwd").val());
-console.log(url);
    $.ajax({url: url, 
     success : function(result) {
-     console.log(result);
        var r = result.split('~');
        if (r[0]=='s') {
            window.localStorage.setItem('me',r[1]);
@@ -268,7 +220,6 @@ function members()
   $("#neweml").val('');
   jQuery.mobile.changePage("#infampage", {transition: "flip"});
   url='http://famclub.com.au/enterfam.php?id='+thisfam;
-  console.log(url);
   $.ajax({url: url, 
     success : function(result) {
       $("#infamdata").html(result);
@@ -331,7 +282,6 @@ function viewfam()
 
 function invite()
 { url='http://famclub.com.au/invite.php?id='+thisfam+'&email='+encodeURIComponent($("#neweml").val());
-  console.log(url);
   $.ajax({url: url, 
     success : function(result) {
       enterfam(thisfam);
@@ -341,7 +291,6 @@ function invite()
 
 function accept(a)
 { url='http://famclub.com.au/getfams.php?accept='+a+'&user='+me;
-  console.log(url);
   $.ajax({url: url, 
     success : function(result) {
       $("#famdata").html(result);
@@ -369,7 +318,6 @@ function hideerr()
 
 function register()
 { url='http://famclub.com.au/register.php?data='+encodeURIComponent($("#email").val()+'~'+$("#pwd").val()+'~'+$("#fname").val()+'~'+$("#lname").val());
-  console.log(url);
   $.ajax({url: url, 
     success : function(result) {
       r=result.split('~');
@@ -387,7 +335,6 @@ function register()
 function createfam()
 { 
 url='http://famclub.com.au/newfam.php?data='+encodeURIComponent($("#famname").val()+'~'+$("#famsub").val()+'~'+me);
-  console.log(url);
   $.ajax({url: url, 
     success : function(result) {
       r=result.split('~');
