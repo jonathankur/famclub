@@ -102,19 +102,11 @@ function asubmit()
      qlist : $("#qlist").val(),
      why : $("#why").val(),
      chosen : $("#member").val()
-  }
+  };
   $.post(url,data)
   .done(function(result) {
      goact();
   });
-}
-
-function fail(e) {
-alert('fail: ');
-}
-
-function errorHandler()
-{ alert('error');
 }
 
 function takepic()
@@ -123,13 +115,13 @@ function takepic()
   });
 }
 
-function onSuccess(imageData) {
+function onSuccess(imageData) 
 { var url='http://famclub.com.au/uppic.php';
   var data = {
      member : me,
      family : thisfam,
      pic : imageData
-  }
+  };
   $.post(url,data)
   .done(function(result) {
      viewfam();
