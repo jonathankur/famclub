@@ -133,8 +133,16 @@ function onSuccess(imageData)
 }
 
 function jkinit()
-{ var lme = window.localStorage.getItem('me');
-  if (!lme) lme='';
+{ alert('starting');
+  try {
+    var lme = window.localStorage.getItem('me');
+    if (!lme) lme='';
+  }
+  catch {
+    alert('error with local storage');
+    lme='';
+  }
+
   if (lme.length) {
     me=lme;
     gofam(me);
