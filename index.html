@@ -49,6 +49,7 @@ facebookConnectPlugin.login(["public_profile", "email"], fbLoginSuccess,
 );
 }
 
+
 function setback()
 { var rr = 1-rat;
   var r = Math.floor(cols[curback][0] * rr + rat * cols[curnext][0]);
@@ -135,8 +136,8 @@ function onSuccess(imageData)
   });
 }
 
-function jkinit()
-{ try {
+$(document).ready(function () {
+ try {
     var lme = window.localStorage.getItem('me');
     if (!lme) lme='';
   }
@@ -152,7 +153,7 @@ function jkinit()
      $("#p1").show();
   }
   setback();
-}
+});
 
 function jlogout()
 {  
@@ -419,7 +420,7 @@ function hideferr()
 }
 </style>
 </head>
-<body onload="jkinit()">
+<body>
 
 <div data-role="page" id="intropage" class="mypg myback">
 
