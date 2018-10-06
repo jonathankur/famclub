@@ -97,6 +97,9 @@
 <access origin="http://famclub.com.au" subdomains="true" />
 <plugin name="cordova-android-support-gradle-release" source="npm" />
 <edit-config target="NSCameraUsageDescription" file="*-Info.plist" mode="merge">
-    <string>add selfies to your family picture</string>
+    <string>Add selfies to your family picture</string>
+</edit-config>
+<edit-config target="NSPhotoLibraryUsageDescription" file="*-Info.plist" mode="merge">
+    <string>Add selfies to your family picture</string>
 </edit-config>
 </widget>
