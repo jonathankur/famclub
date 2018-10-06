@@ -17,6 +17,8 @@ var cols=[[153,255,153],[102,255,204],[153,204,255],[255,153,255],[153,204,255],
 var curback = 0, curnext=1;
 var rat=0.00;
 var thisfam=0;
+var shpcat=0;
+var thisitem=0;
 var me=0;
 var keeptrying=6;
 
@@ -27,6 +29,7 @@ var fbLoginSuccess = function (userData) {
            r=result.split('~');
            if (r[0]) {
              window.localStorage.setItem('me',r[0]);
+             me=r[0];
              window.localStorage.setItem('myname',r[1]);
              gofam();
            }
@@ -133,13 +136,11 @@ function onSuccess(imageData)
 }
 
 function jkinit()
-{ alert('starting');
-  try {
+{ try {
     var lme = window.localStorage.getItem('me');
     if (!lme) lme='';
   }
   catch {
-    alert('error with local storage');
     lme='';
   }
 
@@ -236,14 +237,67 @@ function members()
 function goshopping()
 {
   $("#shopdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
-  $("#newshop").val('');
   jQuery.mobile.changePage("#shoppingpage", {transition: "flip"});
-  url='http://famclub.com.au/shopping.php?id='+thisfam;
+  url='http://famclub.com.au/shopcats.php?id='+thisfam;
   $.ajax({url: url, 
     success : function(result) {
       $("#shopdata").html(result);
       $("#shopdata").trigger('create');
     }
+  });
+}
+
+function shopcat(a)
+{ shpcat=a;
+  $("#shopdata2").html('<center><img src="loading.gif" style="max-width:80%"></center>');
+  $("#newshop").val('');
+  jQuery.mobile.changePage("#shoppingpage2", {transition: "flip"});
+  url='http://famclub.com.au/shopping.php?id='+thisfam+'&cat='+a;
+  $.ajax({url: url, 
+    success : function(result) {
+      $("#shopdata2").html(result);
+      $("#shopdata2").trigger('create');
+    }
+  });
+}
+
+function shopitem(a)
+{ thisitem=a;
+  url='http://famclub.com.au/shopitem.php?item='+a;
+  $.ajax({url: url, 
+    success : function(result) {
+      $("#shopdata2").html(result);
+      $("#shopdata2").trigger('create');
+    }
+  });
+}
+
+function addtoshop()
+{ var url='http://famclub.com.au/shopping.php';
+  var data = {
+     member : me,
+     id : thisfam,
+     cat : shpcat,
+     name : $("#newshop").val()
+  };
+  $.post(url,data)
+  .done(function(result) {
+     shopcat(shpcat)
+  });
+}
+
+function shopstatus(sts)
+{ var url='http://famclub.com.au/shopstatus.php';
+  var data = {
+     me : me,
+     item : thisitem,
+     cat : shpcat,
+     family : thisfam,
+     sts : sts
+  };
+  $.post(url,data)
+  .done(function(result) {
+     shopcat(shpcat)
   });
 }
 
@@ -469,16 +523,17 @@ function hideferr()
 </div>
 
 <div data-role="page" id="shoppingpage" class="mypg myback">
- <div role="main" class="ui-content myback">
-<a href="#smenupanel" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-mini">Menu</a>
-<center>
-<img src="logo.png" style="width:50%; margin-bottom:5px">
-</center>
-<div style="padding:15px">
+<div data-role="header" data-fullscreen="true">
+ <div data-role="navbar" style="background-color:#1F483E">
+   <a href="#smenupanel" class="ui-btn ui-corner-all ui-btn-inline ui-mini">Menu</a>
+   <span style="color:white"> &nbsp; FamClub</span>
+ </div>
+</div>
+<div role="main" class="ui-content myback">
+<h2>Shopping List</h2>
+
   <div id="shopdata" style="margin-bottom:20px">
   </div>
-  <input type="text" name="newshop" id="newshop" placeholder="New Item to Add to List"><a href="javascript:addtoshop();" class="ui-btn ui-corner-all">ADD ITEM</a>
-</div>
  </div>
 	<div data-role="panel" id="smenupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup" >
@@ -492,6 +547,20 @@ function hideferr()
 
         <a href="" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left">Close Menu</a>
 	</div>
+</div>
+
+<div data-role="page" id="shoppingpage2" class="mypg myback">
+<div data-role="header" data-fullscreen="true">
+ <div data-role="navbar" style="background-color:#1F483E">
+   <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-btn-inline ui-mini">&lt; Categories</a>
+   <span style="color:white"> &nbsp; FamClub</span>
+ </div>
+</div>
+<div role="main" class="ui-content myback">
+
+  <div id="shopdata2">
+  </div>
+</div>
 </div>
  
 
