@@ -2,7 +2,7 @@
     <widget xmlns   = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "au.com.famclub"
-        version     = "1.0.2" >
+        version     = "1.0.3" >
 
     <!-- versionCode is optional and Android only -->
 
@@ -15,66 +15,14 @@
     <author href="https://build.phonegap.com" email="support@phonegap.com">
         Jonathan Kur 
     </author>
+<icon src="icon.png" width="64" height="64" />
 <platform name="ios">
-<icon src="res/icon/ios/icon-1024.png" width="1024" height="1024"/>
-<icon src="res/icon/ios/icon-small.png" width="29" height="29"/>
-<icon src="res/icon/ios/icon-small@2x.png" width="58" height="58"/>
-<icon src="res/icon/ios/icon-small@3x.png" width="87" height="87"/>
-<icon src="res/icon/ios/icon-small-40.png" width="40" height="40"/>
-<icon src="res/icon/ios/icon-small-40@2x.png" width="80" height="80"/>
-<icon src="res/icon/ios/icon-small-40@3x.png" width="120" height="120"/>
-<icon src="res/icon/ios/icon-small-50.png" width="50" height="50"/>
-<icon src="res/icon/ios/icon-small-50@2x.png" width="100" height="100"/>
-<icon src="res/icon/ios/icon.png" width="57" height="57"/>
-<icon src="res/icon/ios/icon@2x.png" width="114" height="114"/>
-<icon src="res/icon/ios/icon-60.png" width="60" height="60"/>
-<icon src="res/icon/ios/icon-60@2x.png" width="120" height="120"/>
-<icon src="res/icon/ios/icon-60@3x.png" width="180" height="180"/>
-<icon src="res/icon/ios/icon-72.png" width="72" height="72"/>
-<icon src="res/icon/ios/icon-72@2x.png" width="144" height="144"/>
-<icon src="res/icon/ios/icon-76.png" width="76" height="76"/>
-<icon src="res/icon/ios/icon-76@2x.png" width="152" height="152"/>
-<icon src="res/icon/ios/icon-167.png" width="167" height="167"/>
-<icon src="res/icon/ios/icon-83.5@2x.png" width="167" height="167"/>
- <!--  Storyboard portrait  -->
-<splash src="res/screen/ios/Default@2x~iphone~anyany.png"/>
-<splash src="res/screen/ios/Default@2x~iphone~comany.png"/>
-<splash src="res/screen/ios/Default@3x~iphone~anyany.png"/>
-<splash src="res/screen/ios/Default@3x~iphone~comany.png"/>
-<splash src="res/screen/ios/Default@2x~ipad~anyany.png"/>
-<splash src="res/screen/ios/Default@2x~ipad~comany.png"/>
 </platform>
 <platform name="android">
-<preference name="SplashMaintainAspectRatio" value="true"/>
-<preference name="SplashShowOnlyFirstTime" value="true"/>
-<icon density="ldpi" src="res/icon/android/ldpi.png"/>
-<icon density="mdpi" src="res/icon/android/mdpi.png"/>
-<icon density="hdpi" src="res/icon/android/hdpi.png"/>
-<icon density="xhdpi" src="res/icon/android/xhdpi.png"/>
-<icon density="xxhdpi" src="res/icon/android/xxhdpi.png"/>
-<icon density="xxxhdpi" src="res/icon/android/xxxhdpi.png"/>
-<splash density="port-ldpi" src="res/screen/android/splash-port-ldpi.png"/>
-<splash density="port-mdpi" src="res/screen/android/splash-port-mdpi.png"/>
-<splash density="port-hdpi" src="res/screen/android/splash-port-hdpi.png"/>
-<splash density="port-xhdpi" src="res/screen/android/splash-port-xhdpi.png"/>
-<splash density="port-xxhdpi" src="res/screen/android/splash-port-xxhdpi.png"/>
-<splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png"/>
 <config-file parent="/resources" target="./res/values/strings.xml">
     <string name="fb_app_id">1561631040639833</string>
     <string name="fb_app_name">FamClub</string>
 </config-file>
-</platform>
-    <platform name="windows">
-        <icon src="res/icon/windows/storelogo.png" target="StoreLogo"/>
-        <icon src="res/icon/windows/smalllogo.png" target="Square30x30Logo"/>
-        <icon src="res/icon/windows/Square44x44Logo.png" target="Square44x44Logo"/>
-        <icon src="res/icon/windows/Square70x70Logo.png" target="Square70x70Logo"/>
-        <icon src="res/icon/windows/Square71x71Logo.png" target="Square71x71Logo"/>
-        <icon src="res/icon/windows/Square150x150Logo.png" target="Square150x150Logo"/>
-        <icon src="res/icon/windows/Square310x310Logo.png" target="Square310x310Logo"/>
-
-        <splash src="res/screen/windows/splashscreen.png" target="SplashScreen"/>
-        <splash src="res/screen/windows/splashscreenphone.png" target="SplashScreenPhone"/>
 </platform>
 <gap:plugin name="onesignal-cordova-plugin" spec="^2.4.1" source="npm" />
 
@@ -82,7 +30,7 @@
 <preference name="phonegap-version" value="cli-8.0.0" />
 
 <preference name="android-build-tool" value="gradle" />
-<preference name="android-minSdkVersion" value="16" />
+<preference name="android-minSdkVersion" value="15" />
 
 <!-- Can omit if not targetting Windows Phone -->
 <preference name="windows-appx-target" value="8.1-phone" />
@@ -104,14 +52,10 @@
         <variable name="ANDROID_SUPPORT_VERSION" value="26.+" />
     </plugin>
 
-<plugin name="cordova-plugin-splashscreen" source="npm" />
 <access origin="http://code.jquery.com" subdomains="true" />
 <access origin="http://famclub.com.au" subdomains="true" />
 <plugin name="cordova-android-support-gradle-release" source="npm" />
 <edit-config target="NSCameraUsageDescription" file="*-Info.plist" mode="merge">
-    <string>add selfies to your family picture</string>
-</edit-config>
-<edit-config target="NSPhotoLibraryUsageDescription" file="*-Info.plist" mode="merge">
     <string>add selfies to your family picture</string>
 </edit-config>
 </widget>
