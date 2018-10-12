@@ -10,11 +10,6 @@
 	<script src="phonegap.js"></script>
       <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 	<script src="jquery.mobile-1.4.5.min.js"></script>
-<style type="text/css">
-.embord {
-  border:2px solid navy;
-}
-</style>
 	<script>
 
 // var cols=[[204,255,255],[204,204,255],[255,204,255],[255,204,204],[255,255,204],[204,255,204]]; 
@@ -25,10 +20,7 @@ var thisfam=0;
 var shpcat=0;
 var thisitem=0;
 var me=0;
-var photopage=1;
 var keeptrying=6;
-var mymood=0;
-var myfeeltxt='';
 
 var fbLoginSuccess = function (userData) {
   url='http://famclub.com.au/facebook.php?user='+userData.authResponse.userID+'&access='+userData.authResponse.accessToken;
@@ -232,9 +224,8 @@ function members()
 {
   $("#infamdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
   $("#neweml").val('');
-  $("#showinv").show();
   jQuery.mobile.changePage("#infampage", {transition: "flip"});
-  url='http://famclub.com.au/enterfam.php?id='+thisfam+'&me='+me;
+  url='http://famclub.com.au/enterfam.php?id='+thisfam;
   $.ajax({url: url, 
     success : function(result) {
       $("#infamdata").html(result);
@@ -243,43 +234,6 @@ function members()
   });
 }
 
-function membfeel()
-{
-  $("#infamdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
-  $("#showinv").hide();
-  url='http://famclub.com.au/membfeel.php?me='+me;
-  $.ajax({url: url, 
-    success : function(result) {
-      $("#infamdata").html(result);
-      $("#infamdata").trigger('create');
-    }
-  });
-}
-
-function membfeelsave()
-{
-  $("#infamdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
-  var url='http://famclub.com.au/membfeelsave.php';
- feeltxt=$("#feeltxt").val();
-  var data = {
-     member : me,
-     family : thisfam,
-     mood : mymood,
-     feeltxt : myfeeltxt
-  };
-console.log(data);
-  $.post(url,data)
-  .done(function(result) {
-     members();
-  });
-}
-
-function choosemood(a)
-{ mymood=a;
-  for (e=0; e<16; e++) 
-    if (a==e) $("#em"+e).addClass('embord');
-    else $("#em"+e).removeClass('embord');
-}
 
 function goshopping()
 {
@@ -376,7 +330,6 @@ function viewpast(n)
 function gopics()
 { $("#phot2").hide();
   $("#phot1").show();
-  photopage=1;
   jQuery.mobile.changePage("#picspage", {transition: "flip"});
 }
 
@@ -384,38 +337,6 @@ function viewfam()
 { $("#phot2").html('<img src="http://famclub.com.au/fampics/f'+thisfam+'.png?rnd='+Math.random()+'" style="max-width:100%">');
   $("#phot1").hide();
   $("#phot2").show();
-}
-
-function goindiv(a)
-{ photopage=a;
- indiv();
-}
-
-function indiv()
-{ $("#phot2").html('<center><img src="loading.gif" style="max-width:80%"></center>');
-  $("#phot1").hide();
-  $("#phot2").show();
-  url='http://famclub.com.au/indiv.php?id='+thisfam+'&page='+photopage;
-  $.ajax({url: url, 
-    success : function(result) {
-      $("#phot2").html(result);
-      $("#phot2").trigger('create');
-    }
-  });
-
-}
-
-function indphoto(a)
-{ $("#phot2").html('<center><img src="loading.gif" style="max-width:80%"></center>');
-  $("#phot1").hide();
-  $("#phot2").show();
-  url='http://famclub.com.au/indphoto.php?id='+a;
-  $.ajax({url: url, 
-    success : function(result) {
-      $("#phot2").html(result);
-      $("#phot2").trigger('create');
-    }
-  });
 }
 
 function invite()
@@ -586,9 +507,7 @@ function hideferr()
 <div style="padding:15px">
   <div id="infamdata" style="margin-bottom:20px">
   </div>
- <div id="showinv">
   <input type="text" name="neweml" id="neweml" placeholder="Email Address to Invite"><a href="javascript:invite();" class="ui-btn ui-corner-all">INVITE</a>
- </div>
 </div>
  </div>
 	<div data-role="panel" id="menupanel" data-position="left" data-display="overlay" data-theme="a">
@@ -669,8 +588,7 @@ function hideferr()
       <div data-role="navbar" data-iconpos="bottom">
         <ul>
 	   <li><a href="javascript:takepic()" data-icon="camera">Take Photo</a></li>
-          <li><a href="javascript:viewfam()" data-icon="eye">See MashUp</a></li>
-          <li><a href="javascript:indiv()" data-icon="grid">Photos</a></li>
+          <li><a href="javascript:viewfam()" data-icon="eye">View MashUp</a></li>
         </ul>
      </div>
    </div> 
