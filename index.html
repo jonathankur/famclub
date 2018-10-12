@@ -30,33 +30,6 @@ var keeptrying=6;
 var mymood=0;
 var myfeeltxt='';
 
-var fbLoginSuccess = function (userData) {
-  url='http://famclub.com.au/facebook.php?user='+userData.authResponse.userID+'&access='+userData.authResponse.accessToken;
-  $.ajax({url: url, 
-    success : function(result) {
-           r=result.split('~');
-           if (r[0]) {
-             window.localStorage.setItem('me',r[0]);
-             me=r[0];
-             window.localStorage.setItem('myname',r[1]);
-             gofam();
-           }
-           else jlogout();
-    }
-  });
-
-}
- 
-
-function dofacebooklogin()
-{
-facebookConnectPlugin.login(["public_profile", "email"], fbLoginSuccess,
-  function (error) {
-    alert("ERROR: "+JSON.stringify(error))
-  }
-);
-}
-
 
 function setback()
 { var rr = 1-rat;
@@ -518,9 +491,6 @@ function hideferr()
 <br>
 <div id="err" style="color:white; background-color:red; padding:3px;display:none">Error</div>
 <br>
-<center>
-<img src="facebook.png" style="width:80%" onclick="dofacebooklogin()">
-</center>
 <div data-role="popup" id="tourpop">
  <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
  <div style="padding:10px">

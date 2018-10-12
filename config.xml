@@ -86,10 +86,6 @@
 <splash density="port-xhdpi" src="res/screen/android/splash-port-xhdpi.png"/>
 <splash density="port-xxhdpi" src="res/screen/android/splash-port-xxhdpi.png"/>
 <splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png"/>
-<config-file parent="/resources" target="./res/values/strings.xml">
-    <string name="fb_app_id">1561631040639833</string>
-    <string name="fb_app_name">FamClub</string>
-</config-file>
  <!--  Landscape  -->
  <!--
 
@@ -135,10 +131,7 @@
     </plugin>
 <plugin name="cordova-plugin-splashscreen" source="npm" />
 <plugin name="cordova-plugin-whitelist" source="npm" />
-<plugin name="cordova-plugin-facebook4" source="npm">
- <variable name="APP_ID" value="1561631040639833" />
- <variable name="APP_NAME" value="FamClub" />
-</plugin>
+
   <plugin name="cordova-android-support-gradle-release" source="npm">
         <variable name="ANDROID_SUPPORT_VERSION" value="26.+" />
     </plugin>
