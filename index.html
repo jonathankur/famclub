@@ -22,6 +22,7 @@ var cols=[[153,255,153],[102,255,204],[153,204,255],[255,153,255],[153,204,255],
 var curback = 0, curnext=1;
 var rat=0.00;
 var thisfam=0;
+var thissendto=0;
 var shpcat=0;
 var thisitem=0;
 var me=0;
@@ -29,7 +30,6 @@ var photopage=1;
 var keeptrying=6;
 var mymood=0;
 var myfeeltxt='';
-
 
 function setback()
 { var rr = 1-rat;
@@ -85,8 +85,7 @@ function asubmit()
      member : me,
      family : thisfam,
      qlist : $("#qlist").val(),
-     why : $("#why").val(),
-     chosen : $("#member").val()
+     why : $("#why").val()
   };
   $.post(url,data)
   .done(function(result) {
@@ -229,6 +228,34 @@ function membfeel()
   });
 }
 
+function membgo(a)
+{ thissendto=a;
+  $("#infamdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
+  $("#showinv").hide();
+  url='http://famclub.com.au/membgo.php?fam='+thisfam+'&me='+me+'&to='+a;
+  $.ajax({url: url, 
+    success : function(result) {
+      $("#infamdata").html(result);
+      $("#infamdata").trigger('create');
+    }
+  });
+}
+
+function membgomess()
+{ var url='http://famclub.com.au/message.php';
+  var data = {
+     member : me,
+     id : thisfam,
+     sendto : thissendto,
+     name : myfeeltxt
+  };
+  $.post(url,data)
+  .done(function(result) {
+     members();
+  });
+}
+
+
 function membfeelsave()
 {
   $("#infamdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
@@ -330,6 +357,8 @@ function goact()
     success : function(result) {
       $("#act1").html(result);
       $("#act1").trigger('create');
+      var objDiv = document.getElementById("why");
+      objDiv.scrollTop = objDiv.scrollHeight;
     }
   });
 }
@@ -496,7 +525,7 @@ function hideferr()
  <div style="padding:10px">
  <p><b>Welcome to FamClub!</b></p>
  <p>Here our aim is to contribute to happy, smooth-running families where everybody feels that their needs and feelings are being considered and there is open dialogue between family members</p>
- <p>Log-In with Facebook or by creating an email address and password and see if you have been invited into any families.</p>
+ <p>Log-In with your email address, set a password and see if you have been invited into any families.</p>
  <p>If not, create your own family and invite people to join.</p>
  </div>
 </div>
@@ -548,11 +577,13 @@ function hideferr()
 </div>
 
 <div data-role="page" id="infampage" class="mypg myback">
- <div role="main" class="ui-content myback">
-<a href="#menupanel" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-mini">Menu</a>
-<center>
-<img src="logo.png" style="width:50%; margin-bottom:5px">
-</center>
+<div data-role="header" data-fullscreen="true">
+ <div data-role="navbar" style="background-color:#1F483E">
+   <a href="#menupanel" class="ui-btn ui-corner-all ui-btn-inline ui-mini">Menu</a>
+   <span style="color:white"> &nbsp; FamClub</span>
+ </div>
+</div>
+<div role="main" class="ui-content myback">
 <div style="padding:15px">
   <div id="infamdata" style="margin-bottom:20px">
   </div>
@@ -563,7 +594,7 @@ function hideferr()
  </div>
 	<div data-role="panel" id="menupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup">
-         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Today's Activity</a>
+         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Daily Discussion</a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
          <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
@@ -589,7 +620,7 @@ function hideferr()
  </div>
 	<div data-role="panel" id="smenupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup" >
-         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Today's Activity</a>
+         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Daily Discussion</a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
          <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
@@ -647,7 +678,7 @@ function hideferr()
 
 	<div data-role="panel" id="pmenupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup" >
-         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Today's Activity</a>
+         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Daily Discussion</a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
          <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
@@ -674,7 +705,7 @@ function hideferr()
 
 	<div data-role="panel" id="amenupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup" >
-         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Today's Activity</a>
+         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Daily Discussion</a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
          <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
