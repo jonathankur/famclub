@@ -15,7 +15,7 @@
   border:2px solid navy;
 }
 </style>
-	<script>
+	<script type="text/javascript">
 
 // var cols=[[204,255,255],[204,204,255],[255,204,255],[255,204,204],[255,255,204],[204,255,204]]; 
 var cols=[[153,255,153],[102,255,204],[153,204,255],[255,153,255],[153,204,255],[102,255,204]];
@@ -117,21 +117,19 @@ function onSuccess(imageData)
 }
 
 $(document).ready(function () {
- try {
-    var lme = window.localStorage.getItem('me');
+   var lme='';
+   try {
+    lme = window.localStorage.getItem('me');
     if (!lme) lme='';
   }
-  catch {
-    lme='';
-  }
+  catch (err) {
 
+  }
   if (lme.length) {
     me=lme;
     gofam(me);
   }
-  else {
-     $("#p1").show();
-  }
+ 
   setback();
 });
 
@@ -139,7 +137,7 @@ function jlogout()
 {  
 window.localStorage.removeItem('me');
  me='';
-   $("#p1").show();
+ 
    jQuery.mobile.changePage("#intropage", {transition: "flip"});
 }
 
@@ -182,7 +180,7 @@ function gofam()
   try {
    getonestatus();
   }
-  catch {
+  catch (err) {
 
   };
 
@@ -281,6 +279,19 @@ function choosemood(a)
     else $("#em"+e).removeClass('embord');
 }
 
+function gotodo()
+{
+  $("#todo1").html('<center><img src="loading.gif" style="max-width:80%"></center>');
+  jQuery.mobile.changePage("#todopage", {transition: "flip"});
+  url='http://famclub.com.au/todo.php?fam='+thisfam+'&me='+me;
+  $.ajax({url: url, 
+    success : function(result) {
+      $("#todo1").html(result);
+      $("#todo1").trigger('create');
+    }
+  });
+}
+
 function goshopping()
 {
   $("#shopdata").html('<center><img src="loading.gif" style="max-width:80%"></center>');
@@ -293,6 +304,7 @@ function goshopping()
     }
   });
 }
+
 
 function shopcat(a)
 { shpcat=a;
@@ -506,7 +518,6 @@ function hideferr()
 <div data-role="page" id="intropage" class="mypg myback">
 
  <div role="main" class="ui-content myback">
-<div name="p1" id="p1" style="display:none">
 <center>
 <img src="logo.png" style="width:50%; margin-bottom:15px">
 <br>
@@ -528,8 +539,6 @@ function hideferr()
  <p>Log-In with your email address, set a password and see if you have been invited into any families.</p>
  <p>If not, create your own family and invite people to join.</p>
  </div>
-</div>
-
 </div>
 </div>
 </div>
@@ -594,12 +603,15 @@ function hideferr()
  </div>
 	<div data-role="panel" id="menupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup">
-         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Daily Discussion</a>
+         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+        <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Daily Discussion</a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
-         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+         <a href="javascript:gocal()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Calendar</a>
+         <a href="javascript:gotodo()" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
+         <a href="javascript:golog()" class="ui-btn ui-corner-all ui-icon-info ui-btn-icon-left">View Activity Log</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
- 
+
 	</div>
         <a href="" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left">Close Menu</a>
 	</div>
@@ -620,10 +632,12 @@ function hideferr()
  </div>
 	<div data-role="panel" id="smenupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup" >
-         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Daily Discussion</a>
+         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+        <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Daily Discussion</a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
-         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+         <a href="javascript:gocal()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Calendar</a>
+         <a href="javascript:gotodo()" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
@@ -678,10 +692,12 @@ function hideferr()
 
 	<div data-role="panel" id="pmenupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup" >
-         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Daily Discussion</a>
+         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+        <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Daily Discussion</a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
-         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+         <a href="javascript:gocal()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Calendar</a>
+         <a href="javascript:gotodo()" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
@@ -705,10 +721,41 @@ function hideferr()
 
 	<div data-role="panel" id="amenupanel" data-position="left" data-display="overlay" data-theme="a">
         <div data-role="controlgroup" >
-         <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Daily Discussion</a>
+         <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+        <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Daily Discussion</a>
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
+         <a href="javascript:gocal()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Calendar</a>
+         <a href="javascript:gotodo()" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
+         <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
+ 
+	</div>
+
+        <a href="" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left">Close Menu</a>
+	</div>
+</div>
+
+<div data-role="page" id="todopage" class="mypg myback">
+<div data-role="header" data-fullscreen="true">
+ <div data-role="navbar" style="background-color:#1F483E">
+   <a href="#tmenupanel" class="ui-btn ui-corner-all ui-btn-inline ui-mini">Menu</a>
+   <span style="color:white"> &nbsp; FamClub</span>
+ </div>
+</div>
+ <div role="main" class="ui-content myback">
+<div style="padding:15px" id="todo1">
+
+</div>
+</div>
+
+	<div data-role="panel" id="tmenupanel" data-position="left" data-display="overlay" data-theme="a">
+        <div data-role="controlgroup" >
          <a href="javascript:members()" class="ui-btn ui-corner-all ui-icon-user ui-btn-icon-left">Family Members </a>
+        <a href="javascript:goact()" class="ui-btn ui-corner-all ui-icon-comment ui-btn-icon-left">Daily Discussion</a>
+         <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
+         <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
+         <a href="javascript:gocal()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Calendar</a>
+         <a href="javascript:gotodo()" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
