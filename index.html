@@ -30,6 +30,7 @@ var photopage=1;
 var keeptrying=6;
 var mymood=0;
 var myfeeltxt='';
+var todobox='';
 
 function setback()
 { var rr = 1-rat;
@@ -100,7 +101,7 @@ function takepic()
 }
 
 function onFail(message) {
-    alert(message);
+ //   alert(message);
 }
 
 function onSuccess(imageData) 
@@ -279,11 +280,10 @@ function choosemood(a)
     else $("#em"+e).removeClass('embord');
 }
 
-function gotodo()
-{
-  $("#todo1").html('<center><img src="loading.gif" style="max-width:80%"></center>');
+function gotodo(a)
+{ $("#todo1").html('<center><img src="loading.gif" style="max-width:80%"></center>');
   jQuery.mobile.changePage("#todopage", {transition: "flip"});
-  url='http://famclub.com.au/todo.php?fam='+thisfam+'&me='+me;
+  url='http://famclub.com.au/todo.php?fam='+thisfam+'&me='+me+'&todo='+a;
   $.ajax({url: url, 
     success : function(result) {
       $("#todo1").html(result);
@@ -291,6 +291,54 @@ function gotodo()
     }
   });
 }
+
+function newtodo()
+{ todobox='000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
+  url='http://famclub.com.au/newtodo.php?fam='+thisfam+'&me='+me;
+  $.ajax({url: url, 
+    success : function(result) {
+      $("#todo1").html(result);
+      $("#todo1").trigger('create');
+    }
+  });
+}
+
+function chngbox(a)
+{ var c = todobox.charAt(a);
+  if (c=='0') c='1';
+  else c='0';
+  todobox="" + todobox.substr(0,a) + c + todobox.substr(a+1);
+}
+
+function fliptodo(a,b)
+{ 
+  $("#todo1").html('<center><img src="loading.gif" style="max-width:80%"></center>');
+  url='http://famclub.com.au/todo.php?fam='+thisfam+'&me='+me+'&todo='+a+'&flip='+b;
+  $.ajax({url: url, 
+    success : function(result) {
+      $("#todo1").html(result);
+      $("#todo1").trigger('create');
+    }
+  });
+}
+
+function savetodo()
+{ var url='http://famclub.com.au/todo.php';
+  var data = {
+     me : me,
+     fam : thisfam,
+     todo : 0,
+     todobox : todobox,
+     txt : myfeeltxt
+  };
+  $.post(url,data)
+  .done(function(result) {
+      $("#todo1").html(result);
+      $("#todo1").trigger('create');
+  });
+}
+
+
 
 function goshopping()
 {
@@ -608,7 +656,7 @@ function hideferr()
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
          <a href="javascript:gocal()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Calendar</a>
-         <a href="javascript:gotodo()" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
+         <a href="javascript:gotodo(0)" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
          <a href="javascript:golog()" class="ui-btn ui-corner-all ui-icon-info ui-btn-icon-left">View Activity Log</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
 
@@ -637,7 +685,7 @@ function hideferr()
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
          <a href="javascript:gocal()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Calendar</a>
-         <a href="javascript:gotodo()" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
+         <a href="javascript:gotodo(0)" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
@@ -697,7 +745,7 @@ function hideferr()
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
          <a href="javascript:gocal()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Calendar</a>
-         <a href="javascript:gotodo()" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
+         <a href="javascript:gotodo(0)" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
@@ -726,7 +774,7 @@ function hideferr()
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
          <a href="javascript:gocal()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Calendar</a>
-         <a href="javascript:gotodo()" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
+         <a href="javascript:gotodo(0)" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
@@ -755,7 +803,7 @@ function hideferr()
          <a href="javascript:gopics()" class="ui-btn ui-corner-all ui-icon-camera ui-btn-icon-left">Photo Mash</a>
          <a href="javascript:goshopping()" class="ui-btn ui-corner-all ui-icon-shop ui-btn-icon-left">Shopping List</a>
          <a href="javascript:gocal()" class="ui-btn ui-corner-all ui-icon-calendar ui-btn-icon-left">Calendar</a>
-         <a href="javascript:gotodo()" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
+         <a href="javascript:gotodo(0)" class="ui-btn ui-corner-all ui-icon-bullets ui-btn-icon-left">To-Do List</a>
          <a href="javascript:gofam()" class="ui-btn ui-corner-all ui-icon-back ui-btn-icon-left">Exit from this family</a>
  
 	</div>
